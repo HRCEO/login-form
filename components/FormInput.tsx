@@ -1,6 +1,7 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, ReactNode } from 'react';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
+    iconComponent?:ReactNode
     name:string
     placeholder:string
     errors?: string[];
@@ -8,9 +9,10 @@ interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const className = 'w-full h-10 pl-10 border rounded-full outline-none ring-1 ring-gray-200 focus:ring-gray-200 focus:ring-offset-2 invalid:ring-red-400 invalid:ring-offset-2'
 
-const FormInput = ({name,placeholder, errors, ...rest}:FormInputProps) => {
+const FormInput = ({name,placeholder, errors,iconComponent, ...rest}:FormInputProps) => {
     return (
         <div className='w-full relative'>
+            {iconComponent}
             <input className={className} {...rest} required name={name} placeholder={placeholder}></input>
             <div className='absolute'>
             {errors?.map((error, index) => (
