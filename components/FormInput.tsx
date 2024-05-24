@@ -11,16 +11,16 @@ const className = 'w-full h-10 pl-10 border rounded-full outline-none ring-1 rin
 
 const FormInput = ({name,placeholder, errors,iconComponent, ...rest}:FormInputProps) => {
     return (
-        <div className='w-full relative'>
+        <div className='w-full relative flex flex-col'>
             {iconComponent}
             <input className={className} {...rest} required name={name} placeholder={placeholder}></input>
-            <div className='absolute'>
+            
             {errors?.map((error, index) => (
-                <span key={index} className="text-red-200 font-medium">
+                <span key={index} className="text-red-300 font-extralight text-xs">
                     {error}
                 </span>
             ))}
-            </div>
+
         </div>
     );
 };
