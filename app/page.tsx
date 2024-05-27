@@ -6,6 +6,7 @@ import { useFormState } from 'react-dom';
 import { handleLoginForm } from './loginAction';
 import SvgIcon from '@/components/SvgIcon';
 import { IconTypes } from '@/lib/constant';
+import '@/lib/db'
 
 const LoginPage = () => {
   const [state, action] = useFormState(handleLoginForm,null)
