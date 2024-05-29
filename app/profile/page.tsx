@@ -1,6 +1,7 @@
+import db from '@/lib/db';
 import React from 'react';
 
-const ProfilePage = () => {
+const ProfilePage =  async () => {
     return (
         <div>
             ProfilePage
