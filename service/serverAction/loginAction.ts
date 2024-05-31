@@ -1,9 +1,10 @@
 "use server"
 
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const loginSchema = z.object({
-    email:z.string().email({message:'You need input Email form'}).includes('@zod.com',{ message: "Email can use only @zod.com" }),
+    email:z.string().email({message:'You need input Email form'}),
     username: z.string().min(5,{ message: "Username must be at least 5 characters long" }),
     password:z.string()
     .min(10, { message: "Password must be at least 10 characters long" })
@@ -21,6 +22,6 @@ export const handleLoginForm = async (prevState:any,formData:FormData) => {
     if(!checkValidation.success){
         return checkValidation.error.flatten()
     }else{
-        return true
+        redirect("/profile");
     }
 }

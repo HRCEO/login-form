@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
+
 const RootPage = () => {
     return (
         <div className='flex flex-col items-center gap-4 w-2/5 h-full py-10'>
