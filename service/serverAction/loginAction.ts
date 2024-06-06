@@ -11,6 +11,7 @@ const loginSchema = z.object({
     .regex(/\d/, { message: "Password must contain at least one number" })
   });
 
+  
 export const handleLoginForm = async (prevState:any,formData:FormData) => {
     const userInsertData = {
         email:formData.get('email'),
