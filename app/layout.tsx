@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className='flex justify-center items-center w-screen h-screen bg-black'>{children}</body>
+      <body className=" text-white mx-auto max-w-screen-sm bg-gray-900">
+        {children}
+      </body>
     </html>
   );
 }
