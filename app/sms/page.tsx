@@ -23,14 +23,7 @@ const SMSLogin = () => {
         <h2 className="text-xl">Verify your phone number.</h2>
       </div>
       <form action={action} className="flex flex-col gap-3">
-        <Input
-          name="phone"
-          type="text"
-          placeholder="Phone number"
-          required
-          errors={state.error?.formErrors}
-        />
-        {state?.token ? (
+        {state.token ? (
           <Input
             name="token"
             type="number"
@@ -38,8 +31,17 @@ const SMSLogin = () => {
             required
             min={100000}
             max={999999}
+            errors={state.error?.formErrors}
           />
-        ) : null}
+        ) : (
+          <Input
+            name="phone"
+            type="text"
+            placeholder="Phone number"
+            required
+            errors={state.error?.formErrors}
+          />
+        )}
         <Button text={state.token ? "Verify Token" : "Send Verification SMS"} />
       </form>
     </div>

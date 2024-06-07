@@ -7,6 +7,11 @@ import {
 } from "@/lib/constant";
 import db from "@/lib/db";
 import { z } from "zod";
+import bcrypt from "bcrypt";
+
+import { redirect } from "next/navigation";
+
+import { saveUserIdToSession } from "@/util/function";
 
 const checkPasswords = ({
   password,
@@ -27,12 +32,52 @@ const formSchema = z
       .max(10)
       .trim()
       .toLowerCase(),
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(PASSWORD_MIN_LENGTH)
-      .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
-    confirmPassword: z.string().min(PASSWORD_MIN_LENGTH),
+    email: z.string().email().toLowerCase(),
+    password: z.string(),
+    // .min(PASSWORD_MIN_LENGTH)
+    // .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+    confirmPassword: z.string(),
+    // .min(PASSWORD_MIN_LENGTH),
+  })
+  .superRefine(async (data, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        username: data.username,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (user) {
+      ctx.addIssue({
+        code: "custom",
+        message: "This username is already taken",
+        path: ["username"],
+        fatal: true,
+      });
+      return z.NEVER;
+    }
+  })
+  .superRefine(async (data, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        email: data.email,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (user) {
+      ctx.addIssue({
+        code: "custom",
+        message: "This email is already taken",
+        path: ["email"],
+        fatal: true,
+      });
+      return z.NEVER;
+    }
   })
   .refine(checkPasswords, {
     message: "Both passwords should be the same!",
@@ -55,6 +100,21 @@ export const handleCreateAccountForm = async (
   if (!result.success) {
     return result.error.flatten();
   } else {
-    console.log(result.data);
+    const hashedPassword = await bcrypt.hash(result.data.password, 12);
+
+    const user = await db.user.create({
+      data: {
+        username: result.data.username,
+        email: result.data.email,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    await saveUserIdToSession(user.id);
+
+    redirect("/profile");
   }
 };
