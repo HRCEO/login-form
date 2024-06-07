@@ -1,29 +1,57 @@
-'use client'
-import FormButton from '@/components/FormButton';
-import FormInput from '@/components/FormInput';
-import { SvgIcon } from '@/components/SvgIcon';
-import { IconTypes } from '@/lib/constant';
-import { handleCreateAccountForm } from '@/service/serverAction/createAccountAction';
-import React from 'react';
-import { useFormState } from 'react-dom';
+"use client";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+import SocialLogin from "@/components/SocialLogin";
+import { PASSWORD_MIN_LENGTH } from "@/lib/constant";
+import { handleCreateAccountForm } from "@/service/serverAction/createAccountAction";
+import React from "react";
+import { useFormState } from "react-dom";
 
 const CreateAccountPage = () => {
-    const [state, action] = useFormState(handleCreateAccountForm,null)
+  const [state, action] = useFormState(handleCreateAccountForm, null);
 
   return (
-    <div className='flex flex-col items-center w-4/6'>
-      <div className='flex justify-center items-center rounded-full size-20 bg-red-100 mb-10'>Icon</div>
-      <form action={action} className='flex flex-col justify-center gap-5 w-full'>
-          <FormInput iconComponent={<SvgIcon iconType={IconTypes.email}/>} errors={state?.fieldErrors.email ?? []} name='email' type='email' placeholder='Email' />
-          <FormInput iconComponent={<SvgIcon iconType={IconTypes.user}/>} errors={state?.fieldErrors.username ?? []} name='username' placeholder='Username' />
-          <FormInput iconComponent={<SvgIcon iconType={IconTypes.password}/>} errors={state?.fieldErrors.password ?? []} type='password' name='password' placeholder='Password' /> 
-          <FormInput iconComponent={<SvgIcon iconType={IconTypes.password}/>} errors={state?.fieldErrors.confirmPassword ?? []} type='password' name='confirmPassword' placeholder='Confirm Password' /> 
-          <FormButton text='Submit'/>
+    <div className="flex flex-col gap-10 py-8 px-6">
+      <div className="flex flex-col gap-2 *:font-medium">
+        <h1 className="text-2xl">안녕하세요!</h1>
+        <h2 className="text-xl">Fill in the form below to join!</h2>
+      </div>
+      <form action={action} className="flex flex-col gap-3">
+        <Input
+          required
+          name="username"
+          type={"text"}
+          placeholder={"Username"}
+          errors={state?.fieldErrors.username}
+        />
+        <Input
+          required
+          name="email"
+          type={"email"}
+          placeholder={"Email"}
+          errors={state?.fieldErrors.email}
+        />
+        <Input
+          required
+          name="password"
+          type={"password"}
+          placeholder={"Password"}
+          errors={state?.fieldErrors.password}
+          min={PASSWORD_MIN_LENGTH}
+        />
+        <Input
+          required
+          name="confirmPassword"
+          type={"password"}
+          placeholder={"Confirm Password"}
+          errors={state?.fieldErrors.confirmPassword}
+          min={PASSWORD_MIN_LENGTH}
+        />
+        <Button text={"Create account"} />
       </form>
-    
+      <SocialLogin />
     </div>
   );
-   
 };
 
 export default CreateAccountPage;
