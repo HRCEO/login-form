@@ -18,7 +18,6 @@ const ProductList = ({ initialProducts }: ProductListProps) => {
   const trigger = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    console.log("page", page); 
     const observer = new IntersectionObserver(
       async (
         entries: IntersectionObserverEntry[],
@@ -29,17 +28,19 @@ const ProductList = ({ initialProducts }: ProductListProps) => {
           observer.unobserve(trigger.current);
           setIsLoading(true);
 
-          const newProducts = await getMoreProducts(page + 1);
-          if (newProducts.length !== 0) {
-            setProducts((prev) => [...prev, ...newProducts]);
-            setPage((prev) => prev + 1);
-            setIsLoading(false);
-          } else {
-            setIsLastPage(true);
-          }
+          setTimeout(async () => {
+            const newProducts = await getMoreProducts(page + 1);
+            if (newProducts.length !== 0) {
+              setProducts((prev) => [...prev, ...newProducts]);
+              setPage((prev) => prev + 1);
+              setIsLoading(false);
+            } else {
+              setIsLastPage(true);
+            }
+          });
         }
       },
-      {   
+      {
         threshold: 1.0,
       }
     );
@@ -52,6 +53,7 @@ const ProductList = ({ initialProducts }: ProductListProps) => {
     };
   }, [page]);
 
+  console.log("products: ", products);
   return (
     <div className="p-5 flex flex-col gap-5">
       {products.map((product) => (
